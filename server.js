@@ -3,7 +3,7 @@ const express = require('express');
 const app = express();
 const bodyParser = require("body-parser");
 
-const usersRoute = require("./routes1/users");
+const usersRoute = require("./routes/users");
 //const customMiddleWareRoute = require("./routes/customMiddleWare");
 //const postsRoute = require("./routes/posts");
 //const commentsRoute = require("./routes/comments");
