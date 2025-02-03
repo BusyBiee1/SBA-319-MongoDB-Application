@@ -2,14 +2,15 @@
 const mongoose = require('mongoose');
 
 const reviewsSchema = new mongoose.Schema({
-    review_id: {type: Number, required: true, minimum: 1, unique: true},  
-    user_id: {type: Number, required: true, minimum: 1, unique: true},  
-    car_id: {type: Number, required: true, minimum: 1, unique: true},  
+    review_id: {type: Number, required: true, unique: true},  
+    user_id: {type: Number, required: true},  
+    car_id: {type: Number, required: true},  
     review: {type: String, required: true},
-    // comma above is just in case I add another... key value pair
 }, { versionKey: false }); // suppresses the __v field in the db
 
-reviewsSchema.index({ review: 1}); // create index on review
+
+// Create a compound index to ensure a user can review multiple cars (but not duplicate the review for a single car and vice versa)
+reviewsSchema.index({ user_id: 1, car_id: 1 }, { unique: true });
 
 const Review = mongoose.model("Review", reviewsSchema) // create our model!
 module.exports = Review;
