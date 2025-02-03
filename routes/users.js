@@ -7,6 +7,7 @@ const User = require("../models/users");
 //const Utilserror = require("../utilities/error");
 //const postsDataFile = require("../data/posts");
 const db = require("../db/conn.js");
+//const error = require("./utilities/error");
 
 router
 // get all users
@@ -19,6 +20,7 @@ router
 //add a new user
 //localhost:3010\users\
 .post("/", async (req, res) => {
+    try {
     let result = await User.findOne().sort({user_id: -1});
     if (result.user_id) 
         req.body.user_id = result.user_id +1;
@@ -27,9 +29,26 @@ router
         //result.user_id = 1:
     await User.create(req.body);
     res.send(req.body);
+    }catch (err) {
+    res.status(400).send(err.message); 
+    }
 })
 
-//edit a user by id
+router
+// get a user by id
+// localhost:3010\users\3
+.get("/:id", async (req, res) => {
+    console.log("get a user by id");
+    const query = await User.findOne({user_id: req.params.id});
+    if (query) {
+        res.send(query);
+    }
+    else {
+        res.send("No user found for that user_id: " + req.params.id);
+    }
+})
+// edit a user by id
+// localhost:3010\users\3
 /*
  {
    "name": "nameRaj1",
@@ -37,23 +56,9 @@ router
    "email": "emailRaj1.com"
  }
 */
-router
-// get a user by id
-// localhost:3010\users\3
-.get("/:id", async (req, res) => {
-    //console.log("get a user by id");
-    const query = await User.findOne({user_id: req.params.id});
-    if (query) {
-        res.send(req.body);
-    }
-    else {
-        res.send("No user foudn for that id");
-    }
-})
-// edit a user by id
-// localhost:3010\users\3
 .patch("/:id", async (req, res) => {
     //console.log(req.params.id, req.body)
+    try {
     let query = await User.findOne({user_id: req.params.id});
     if (query) {
         //console.log(req.params.id, req.body)
@@ -61,21 +66,23 @@ router
         res.send(req.body);
     }
     else {
-        res.send("No user foudn for that id");
+        res.send("No user found for that user_id: " + req.params.id);    }
+    }catch (err) {
+        res.status(400).send(err.message); 
     }
 });
 //delete a user by id
-//delete ocalhost:3000/users/3
+//delete localhost:3000/users/3
 router.delete("/:id", async (req, res) => {
     let query = await User.findOne({user_id: req.params.id});
     if (query) {
         //console.log("Request to delete: ",req.params.id, req.body)
         await User.findOneAndDelete({user_id: req.params.id});
-        res.send("user deleted: "+ req.params.id);
+        //res.send("A user was deleted with user_id of: "+ req.params.id);
+        res.send(query);
     }
     else {
-        res.send("No user foudn for that id");
-    }
+        res.send("No user found for that user_id: " + req.params.id);    }
 });
 
 module.exports = router;

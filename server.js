@@ -4,6 +4,8 @@ const app = express();
 const bodyParser = require("body-parser");
 
 const usersRoute = require("./routes/users");
+const carsRoute = require("./routes/cars");
+const reviewsRoute = require("./routes/reviews");
 //const customMiddleWareRoute = require("./routes/customMiddleWare");
 //const postsRoute = require("./routes/posts");
 //const commentsRoute = require("./routes/comments");
@@ -31,6 +33,8 @@ app.use(bodyParser.json({ extended: true }));
 
 // Routes
 app.use("/users", usersRoute);
+app.use("/cars", carsRoute);
+app.use("/reviews", reviewsRoute);
 //app.use("/api/users/customMiddleWare", customMiddleWareRoute);
 //app.use("/api/posts", postsRoute);
 //app.use("/api/comments", commentsRoute);
@@ -62,14 +66,14 @@ app.use((req, res, next) => {
 });
   
 // General Error Handling Middleware
-//app.use((err, req, res, next) => {
-//const status = err.status || 500;
-//res.status(status).json({
-//    error: {
-//    message: err.message,
-//    status
-//    },});
-//});
+app.use((err, req, res, next) => {
+const status = err.status || 500;
+res.status(status).json({
+    error: {
+    message: err.message,
+    status
+    },});
+});
 
 // PORT STUFF!
 //let port = 3000;
