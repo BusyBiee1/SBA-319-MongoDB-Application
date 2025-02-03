@@ -15,6 +15,13 @@ router
 })
 //add a new user
 //localhost:3010\users\
+/*
+{
+    "name": "nameRaj13",
+    "username": "usernameRaj13",
+    "email": "Raj13gmail.com"
+}
+*/
 .post("/", async (req, res) => {
     try 
     {

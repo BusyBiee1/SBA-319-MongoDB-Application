@@ -15,6 +15,13 @@ router
 })
 //add a new car
 //localhost:3010\cars\
+/*
+ {
+   "make": "Toyota",
+   "model": "Civic",
+   "year": 2024
+ }
+*/
 .post("/", async (req, res) => {
     try 
     {
