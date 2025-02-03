@@ -2,10 +2,7 @@ const express = require("express")
 const router = express.Router()
 //
 const Car = require("../models/cars");
-//const usersDataFile = require("../data/users");
-//const customMiddleWare = require ("../routes/customMiddleWare");
-//const Utilserror = require("../utilities/error");
-//const postsDataFile = require("../data/posts");
+
 const db = require("../db/conn.js");
 
 router
@@ -19,17 +16,23 @@ router
 //add a new car
 //localhost:3010\cars\
 .post("/", async (req, res) => {
-    try {
-    let result = await Car.findOne().sort({car_id: -1});
-    if (result.car_id) 
-        req.body.car_id = result.car_id +1;
-    else 
-        req.body.car_id = 1;
-    await Car.create(req.body);
-    res.send(req.body);
-    }catch (err) {
-    res.status(400).send(err.message); 
+    try 
+    {
+        let result = await Car.findOne().sort({car_id: -1});
+        if (result.car_id) 
+            req.body.car_id = result.car_id +1;
+        else 
+            req.body.car_id = 1;
+        await Car.create(req.body);
+        res.send(req.body);
     }
+    catch (err) 
+    {
+        if (err.name ==="validataionError")
+        {
+            return res.status(400).send(err.message);
+        }
+    }     
 })
 
 router
@@ -56,18 +59,25 @@ router
 */
 .patch("/:id", async (req, res) => {
     //console.log(req.params.id, req.body)
-    try {
-    let query = await Car.findOne({car_id: req.params.id});
-    if (query) {
-        //console.log(req.params.id, req.body)
-        await Car.findOneAndUpdate({ car_id: req.params.id}, req.body);
-        res.send(req.body);
+    try 
+    {
+        let query = await Car.findOne({car_id: req.params.id});
+        if (query) {
+            //console.log(req.params.id, req.body)
+            await Car.findOneAndUpdate({ car_id: req.params.id}, req.body);
+            res.send(req.body);
+        }
+        else {
+            res.send("No car found for that car_id: " + req.params.id);    
+        }
     }
-    else {
-        res.send("No car found for that car_id: " + req.params.id);    }
-    }catch (err) {
-        res.status(400).send(err.message); 
-    }
+    catch (err) 
+    {
+        if (err.name ==="validataionError")
+        {
+            return res.status(400).send(err.message);
+        }      
+    }       
 });
 //delete a car by id
 //delete localhost:3000/cars/3

@@ -2,14 +2,10 @@ const express = require("express")
 const router = express.Router()
 //
 const Review = require("../models/reviews");
-//const usersDataFile = require("../data/users");
-//const customMiddleWare = require ("../routes/customMiddleWare");
-//const Utilserror = require("../utilities/error");
-//const postsDataFile = require("../data/posts");
+
 const db = require("../db/conn.js");
 
 router
-//.route("/")
 // get all reviews
 // localhost:3010\reviews\
 .get("/", async (req, res) => {
@@ -30,7 +26,8 @@ router
         await Review.create(req.body);
         console.log("HERE", req.body)
         res.send(req.body);
-    }catch (err) 
+    }
+    catch (err) 
     {
         if (err.name ==="validationError"){
             return res.status(400).send(err.message);
@@ -72,11 +69,13 @@ router
         else {
             res.send("No review found for that review_id: " + req.params.id);    }
         }
-        catch (err) {
-            if (err.name ==="validataionError"){
-                return res.status(400).send(err.message);
-            }
-        }       
+    catch (err) 
+    {
+        if (err.name ==="validataionError")
+        {
+            return res.status(400).send(err.message);
+        }
+    }       
  });
  //delete a review by id
  //delete localhost:3000/reviews/3
