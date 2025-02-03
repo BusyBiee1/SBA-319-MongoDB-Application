@@ -47,7 +47,6 @@ router
 })
 // edit a car by id
 // localhost:3010\cars\3
-//edit a car by id
 /*
  {
    "make": "Toyota",
